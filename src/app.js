@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./config/swagger.js";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import productRoutes from "./routes/product.routes.js";
@@ -15,6 +17,16 @@ app.use(cors());
 // Body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Swagger API Documentation
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    customCss: ".swagger-ui .topbar { display: none }",
+    customSiteTitle: "Online Marketplace API Documentation",
+  }),
+);
 
 // API routes
 app.use("/api/auth", authRoutes);
@@ -41,6 +53,7 @@ app.get("/", (req, res) => {
       users: "/api/users",
       products: "/api/products",
       health: "/health",
+      documentation: "/api-docs",
     },
   });
 });
