@@ -101,3 +101,6 @@ If a product image is missing or broken, a generic placeholder icon will be show
 2. Solution 1: Verify LAPTOP_IP in src/api/api.js is correct.
 3. Solution 2: Ensure Laptop and Phone are on the exact same Wi-Fi.
 4. Solution 3: Turn off Windows Firewall temporarily (Public/Private networks) as it often blocks incoming connections.
+
+## 👤 Author
+Created by Rafif as part of the Specialized Platform Development course.
