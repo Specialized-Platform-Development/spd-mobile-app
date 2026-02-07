@@ -1,264 +1,103 @@
-# Online Marketplace Backend API
+# 📱 Online Marketplace Mobile App
 
-A production-ready RESTful backend API for an Online Marketplace application built with Node.js, Express.js, and MongoDB. This API supports authentication, user management, and product management with comprehensive security features.
+A production-ready mobile application client built with **React Native** and **Expo**. This application serves as the frontend interface for the Online Marketplace system, featuring secure authentication, real-time product browsing, and a dynamic user interface.
+
+Designed to fulfill the requirements for **Mobile App Development (Soal 3)**, ensuring industry-standard architecture, usability, and seamless API integration.
 
 ## 🚀 Features
 
-- **JWT Authentication** - Secure user authentication with JSON Web Tokens
-- **User Management** - Complete CRUD operations for user profiles
-- **Product Management** - Full marketplace product management
-- **Input Validation** - Comprehensive request validation with clear error messages
-- **Security** - Helmet.js security headers and CORS configuration
-- **Error Handling** - Centralized error handling with standard response format
-- **Password Security** - Bcrypt password hashing
-- **RESTful Design** - Clean and intuitive API endpoints
+- **JWT Authentication** - Secure login mechanism with persistent token storage (`AsyncStorage`).
+- **Dynamic Product Catalog** - Real-time data fetching from the backend API.
+- **Smart Category Icons** - Auto-detects product types (e.g., Laptop, Phone, Coffee) to display relevant icons.
+- **Product Detail View** - Comprehensive product information with clean navigation.
+- **Error Handling** - robust handling for network errors and missing images.
+- **Responsive UI** - Modern "Clean UI" design using Cards, Shadows, and standard mobile gestures.
 
 ## 🛠 Technology Stack
 
-- **Runtime**: Node.js
-- **Framework**: Express.js
-- **Database**: MongoDB with Mongoose ODM
-- **Authentication**: JSON Web Tokens (JWT)
-- **Security**: bcrypt, helmet, cors
-- **Validation**: express-validator
-- **Environment**: dotenv
+- **Framework**: React Native (via Expo SDK 52)
+- **Language**: TypeScript / JavaScript
+- **Networking**: Axios (REST API Integration)
+- **Storage**: AsyncStorage (Local Data Persistence)
+- **Navigation**: Expo Router (File-based routing)
+- **UI Components**: Ionicons (@expo/vector-icons)
 
 ## 📁 Project Structure
 
-```
-spd-backend-api/
+```bash
+ecommerce-mobile/
+├── app/                    # Pages & Routing (Expo Router)
+│   ├── (tabs)/             # Main Tab Screens (Home, Explore)
+│   │   ├── _layout.tsx     # Tab configuration (Hidden style)
+│   │   └── index.tsx       # Product List Screen
+│   ├── product/            # Dynamic Routes
+│   │   └── [id].tsx        # Product Detail Screen
+│   ├── index.tsx           # Login Screen
+│   └── _layout.tsx         # Layout Utama Aplikasi
 ├── src/
-│   ├── config/
-│   │   └── database.js          # MongoDB connection
-│   ├── controllers/
-│   │   ├── auth.controller.js   # Authentication logic
-│   │   ├── user.controller.js   # User management
-│   │   └── product.controller.js # Product management
-│   ├── models/
-│   │   ├── User.js              # User schema
-│   │   └── Product.js           # Product schema
-│   ├── routes/
-│   │   ├── auth.routes.js       # Auth endpoints
-│   │   ├── user.routes.js       # User endpoints
-│   │   └── product.routes.js    # Product endpoints
-│   ├── middlewares/
-│   │   ├── auth.middleware.js   # JWT verification
-│   │   ├── validation.middleware.js # Input validation
-│   │   └── errorHandler.js      # Error handling
-│   ├── utils/
-│   │   └── responseHandler.js   # Standard responses
-│   ├── app.js                   # Express app setup
-│   └── server.js                # Server entry point
-├── .env                         # Environment variables
-├── .env.example                 # Environment template
-├── .gitignore
-└── package.json
+│   ├── api/                # API Configuration
+│   │   └── api.js          # Axios setup & Base URL (IP Config)
+│   └── constants/          # Design System
+│       └── theme.ts        # Color Palette & Typography
+└── assets/                 # Static Assets (Images/Fonts)
+```
+## 2. Configure IP Address (important part)
+To allow your physical phone to communicate with the Backend running on your Laptop/PC, they must be on the SAME Wi-Fi Network, and you must configure the IP address correctly.
+
+Check your Laptop's IP Address:
+
+Windows: Open CMD -> type ipconfig -> Look for IPv4 Address on your active Wi-Fi adapter.
+
+Mac/Linux: Open Terminal -> type ifconfig.
+
+Edit Configuration:
+
+Open the file src/api/api.js.
+
+Update the LAPTOP_IP variable with the IP you found.
+```
+// src/api/api.js
+
+// CHANGE THIS to your Laptop's IPv4 Address
+// Example: "192.168.1.5" or "10.36.2.5" (if using Hotspot)
+const LAPTOP_IP = "192.168.X.X"; 
+
+// Ensure this matches your Backend Port
+const API_PORT = "5001"; 
+
+const BASE_URL = `http://${LAPTOP_IP}:${API_PORT}/api`;
 ```
 
-## 🏗 System Architecture
-
-The application follows the **Model-View-Controller (MVC)** pattern with clear separation of concerns:
-
-### Architecture Layers
-
-1. **Routes Layer** - Defines API endpoints and applies middleware
-2. **Middleware Layer** - Handles authentication, validation, and error handling
-3. **Controller Layer** - Contains business logic
-4. **Model Layer** - Defines data schemas and database interactions
-5. **Utility Layer** - Provides helper functions
-
-### Data Flow
+## 3. Run the Application
+Start the Expo development server. It is recommended to use the -c flag to clear the cache and ensure your new IP configuration is loaded.
 
 ```
-Client Request
-    ↓
-Route Handler
-    ↓
-Validation Middleware
-    ↓
-Authentication Middleware (if protected)
-    ↓
-Controller
-    ↓
-Model (Database)
-    ↓
-Response Handler
-    ↓
-Client Response
+npx expo start -c
 ```
 
-## 📦 Installation
+## 4. Connect Device
+1. A QR Code will appear in your terminal.
+2. Open the Expo Go app on your phone.
+3. Scan the QR Code.
+4. The app will bundle and launch on your device.
 
-### Prerequisites
+## 🧪 How to Use
+## Login
+Use a registered email and password (ensure the user exists in the backend database).
 
-- Node.js (v14 or higher)
-- MongoDB (local or MongoDB Atlas)
-- npm or yarn
+Upon success, a JWT Token is saved securely, and you are redirected to the Home screen.
 
-### Local Setup
+## Browsing Products
+The Home Screen lists all available products fetched from the server.
 
-1. **Clone the repository**
+Smart Icons: Notice how the icon changes based on the product name (e.g., a Laptop icon for laptops, a Phone icon for smartphones).
 
-   ```bash
-   git clone <repository-url>
-   cd spd-backend-api
-   ```
+## Product Details
+Tap any product card to view details (Price, Description, Category).
+If a product image is missing or broken, a generic placeholder icon will be shown automatically.
 
-2. **Install dependencies**
-
-   ```bash
-   npm install
-   ```
-
-3. **Configure environment variables**
-
-   ```bash
-   cp .env.example .env
-   ```
-
-   Edit `.env` file with your configuration:
-
-   ```env
-   PORT=5001
-   NODE_ENV=development
-   MONGODB_URI=mongodb://localhost:27017/marketplace
-   JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
-   JWT_EXPIRES_IN=7d
-   ```
-
-4. **Start MongoDB** (if using local MongoDB)
-
-   ```bash
-   # macOS with Homebrew
-   brew services start mongodb-community
-
-   # Linux
-   sudo systemctl start mongod
-
-   # Windows
-   net start MongoDB
-   ```
-
-5. **Run the application**
-
-   ```bash
-   # Development mode with auto-reload
-   npm run dev
-
-   # Production mode
-   npm start
-   ```
-
-6. **Verify the server is running**
-   - Open browser: http://localhost:5001
-   - Health check: http://localhost:5001/health
-
-## 🌐 Deployment
-
-### MongoDB Atlas Setup (Cloud Database)
-
-1. Create a free account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-2. Create a new cluster
-3. Create a database user with password
-4. Whitelist your IP address (or use 0.0.0.0/0 for all IPs)
-5. Get your connection string from "Connect" → "Connect your application"
-6. Update your `.env` file:
-   ```env
-   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/marketplace?retryWrites=true&w=majority
-   ```
-
-## 📚 API Documentation
-
-See [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) for complete API reference with examples.
-
-### Quick Reference
-
-#### Authentication Endpoints
-
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login user
-- `GET /api/auth/profile` - Get user profile (protected)
-
-#### User Endpoints
-
-- `PUT /api/users/profile` - Update profile (protected)
-- `DELETE /api/users/profile` - Delete account (protected)
-
-#### Product Endpoints
-
-- `GET /api/products` - Get all products (public)
-- `GET /api/products/:id` - Get product by ID (public)
-- `POST /api/products` - Create product (protected)
-- `PUT /api/products/:id` - Update product (protected)
-- `DELETE /api/products/:id` - Delete product (protected)
-
-## 🔐 API Response Format
-
-All API responses follow this standard format:
-
-**Success Response:**
-
-```json
-{
-  "success": true,
-  "message": "Success message",
-  "data": { ... }
-}
-```
-
-**Error Response:**
-
-```json
-{
-  "success": false,
-  "message": "Error message",
-  "data": null
-}
-```
-
-## 🧪 Testing
-
-### Using cURL
-
-**Register a user:**
-
-```bash
-curl -X POST http://localhost:5001/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"name":"John Doe","email":"john@example.com","password":"password123"}'
-```
-
-**Login:**
-
-```bash
-curl -X POST http://localhost:5001/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"john@example.com","password":"password123"}'
-```
-
-**Create a product (requires token):**
-
-```bash
-curl -X POST http://localhost:5001/api/products \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
-  -d '{"name":"Product 1","description":"Description here","price":99.99,"stock":10}'
-```
-
-### Using Postman or Thunder Client
-
-1. Import the API endpoints
-2. Set up environment variables for base URL and token
-3. Test each endpoint according to documentation
-
-## 🤝 Contributing
-
-This is an academic project for Lab Modules 1-5 integration.
-
-## 📄 License
-
-ISC
-
-## 👤 Author
-
-Created by Lanisa as part of Specialized Platform Development course.
+## 🤝 Troubleshooting
+1. Issue: App stuck on Login Loading / Network Error
+2. Solution 1: Verify LAPTOP_IP in src/api/api.js is correct.
+3. Solution 2: Ensure Laptop and Phone are on the exact same Wi-Fi.
+4. Solution 3: Turn off Windows Firewall temporarily (Public/Private networks) as it often blocks incoming connections.
