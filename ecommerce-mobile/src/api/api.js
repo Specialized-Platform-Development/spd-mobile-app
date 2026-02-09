@@ -5,13 +5,13 @@ import axios from "axios";
 
 // 1. Cek CMD -> ipconfig -> IPv4 Address (di Wireless LAN adapter)
 // Contoh: "192.168.1.5" atau "192.168.43.xxx" (kalau pakai hotspot)
-const LAPTOP_IP = "10.36.2.5"; // <--- GANTI X DENGAN ANGKA KAMU!
+// const LAPTOP_IP = "192.168.0.105"; // <--- GANTI X DENGAN ANGKA KAMU!
 
 // 2. Pastikan PORT backend benar (Cek terminal backend, biasanya 5000 atau 8080)
 // Di kode kamu tertulis 5001, pastikan backend kamu jalan di 5001 juga ya!
-const API_PORT = "5001";
+// const API_PORT = "5000";
 
-const BASE_URL = `http://${LAPTOP_IP}:${API_PORT}/api`;
+const BASE_URL = `https://spd-backend-api.onrender.com/api`;
 
 // ------------------------------------
 

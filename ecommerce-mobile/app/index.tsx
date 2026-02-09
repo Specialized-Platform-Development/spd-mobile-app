@@ -1,109 +1,34 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
-import {
-  ActivityIndicator,
-  Alert,
-  Button,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
-import { authAPI } from "../src/api/api";
+import { useEffect } from 'react';
+import { View, ActivityIndicator } from 'react-native';
+import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function LoginScreen() {
+export default function Index() {
   const router = useRouter();
-  // Ganti jadi Email
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert("Error", "Email dan Password harus diisi");
-      return;
-    }
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        // In login.tsx I used 'token'. Let's stick to 'token'.
 
-    setLoading(true);
-    try {
-      const response = await authAPI.login(email, password);
-
-      // Sesuai README: response.data = { success: true, data: { token: "..." } }
-      // Jadi token ada di response.data.data.token (atau response.data.token tergantung backendnya)
-      // Kita coba log dulu biar pasti:
-      console.log("Respon Login:", response.data);
-
-      const responseData = response.data;
-
-      if (responseData.success) {
-        // Asumsi token ada di dalam object 'data' (standar umum)
-        // Kalau error "undefined", coba ganti jadi responseData.token
-        const token = responseData.data?.token || responseData.token;
-
-        await AsyncStorage.setItem("userToken", token);
-        Alert.alert("Sukses", "Login Berhasil!");
-        router.replace("/(tabs)");
-      } else {
-        Alert.alert("Gagal", responseData.message || "Login gagal");
+        if (token) {
+          router.replace('/(tabs)');
+        } else {
+          router.replace('/auth/login');
+        }
+      } catch (e) {
+        // Fallback to login if error
+        router.replace('/auth/login');
       }
-    } catch (error: any) {
-      console.error(error);
-      Alert.alert("Gagal", "Email atau password salah / Server error");
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    checkAuth();
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Marketplace Login</Text>
-
-      {/* Input Email */}
-      <TextInput
-        style={styles.input}
-        placeholder="Email (ex: john@example.com)"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-
-      {loading ? (
-        <ActivityIndicator size="large" color="#3498db" />
-      ) : (
-        <Button title="Masuk" onPress={handleLogin} />
-      )}
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ActivityIndicator size="large" />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 20,
-    backgroundColor: "#fff",
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: "center",
-    fontWeight: "bold",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    marginBottom: 15,
-    borderRadius: 5,
-  },
-});
